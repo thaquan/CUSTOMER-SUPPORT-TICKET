@@ -2,6 +2,7 @@
 .venv/
 __pycache__/
 *.py[cod]
+.ipynb_checkpoints/
 
 # Editor and operating-system files
 .vscode/
@@ -13,4 +14,3 @@ Thumbs.db
 data/raw/*.csv
 data/processed/*.csv
 data/exceptions/*.csv
-

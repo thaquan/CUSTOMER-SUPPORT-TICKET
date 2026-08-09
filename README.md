@@ -54,6 +54,8 @@ CUSTOMER-SUPPORT-TICKET/
 │   ├── processed/            # Generated Silver CSV; not committed
 │   │   └── data_quality_summary.json
 │   └── exceptions/           # Conflicting records; not committed
+├── notebooks/
+│   └── 02_gold_model_profiling.ipynb
 ├── src/
 │   ├── clean.py              # Pipeline entry point and file I/O
 │   ├── config.py             # Paths, expected schema, column groups
@@ -162,4 +164,3 @@ The test suite covers helper functions, exact duplicates, invalid fractional CSA
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment
-
