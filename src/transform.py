@@ -118,8 +118,12 @@ def add_analytical_features(df: pd.DataFrame) -> pd.DataFrame:
         labels=["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
     )
     result["customer_key"] = [
-        stable_customer_key(email, ticket_id)
-        for email, ticket_id in zip(result["customer_email"], result["ticket_id"])
+        stable_customer_key(email, customer_name, ticket_id)
+        for email, customer_name, ticket_id in zip(
+            result["customer_email"],
+            result["customer_name"],
+            result["ticket_id"],
+        )
     ]
     return result
 

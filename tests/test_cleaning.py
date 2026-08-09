@@ -30,8 +30,18 @@ class UtilityTests(unittest.TestCase):
         self.assertTrue(pd.isna(actual.iloc[1]))
 
     def test_customer_key_is_stable_and_case_insensitive(self) -> None:
-        first = stable_customer_key("User@Example.com", 1)
-        second = stable_customer_key(" user@example.com ", 99)
+        first = stable_customer_key("User@Example.com", " Test User ", 1)
+        second = stable_customer_key(" user@example.com ", "test user", 99)
+        self.assertEqual(first, second)
+
+    def test_customer_key_distinguishes_different_names(self) -> None:
+        first = stable_customer_key("user@example.com", "Alice", 1)
+        second = stable_customer_key("user@example.com", "Bob", 2)
+        self.assertNotEqual(first, second)
+
+    def test_customer_key_falls_back_when_identity_is_incomplete(self) -> None:
+        first = stable_customer_key("User@Example.com", None, 1)
+        second = stable_customer_key(None, "Test User", 1)
         self.assertEqual(first, second)
 
 

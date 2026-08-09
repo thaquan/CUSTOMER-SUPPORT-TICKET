@@ -15,12 +15,8 @@ def to_snake_case(value: str) -> str:
 
 def normalize_text(series: pd.Series) -> pd.Series:
     """Trim text, collapse whitespace, and retain proper missing values."""
-    return (
-        series.astype("string")
-        .str.strip()
-        .str.replace(r"\s+", " ", regex=True)
-        .replace({"": pd.NA})
-    )
+    cleaned = series.astype("string").str.strip().str.replace(r"\s+", " ", regex=True)
+    return cleaned.mask(cleaned.eq(""), pd.NA)
 
 
 def canonical_category(series: pd.Series) -> pd.Series:
@@ -28,11 +24,22 @@ def canonical_category(series: pd.Series) -> pd.Series:
     return normalize_text(series).str.lower().str.title()
 
 
-def stable_customer_key(email: object, ticket_id: object) -> str:
+def _has_value(value: object) -> bool:
+    """Return True only for a non-missing, non-blank scalar value."""
+    return bool(pd.notna(value)) and bool(str(value).strip())
+
+
+def stable_customer_key(
+    email: object,
+    customer_name: object,
+    ticket_id: object,
+) -> str:
     """Create a deterministic pseudonymous customer identifier."""
-    if pd.notna(email):
-        token = str(email).strip().lower()
+    if _has_value(email) and _has_value(customer_name):
+        normalized_email = str(email).strip().lower()
+        normalized_customer_name = str(customer_name).strip().lower()
+        token = f"{normalized_email}|{normalized_customer_name}"
     else:
-        token = f"missing_email:{ticket_id}"
+        token = f"missing_identity:{ticket_id}"
 
     return hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
