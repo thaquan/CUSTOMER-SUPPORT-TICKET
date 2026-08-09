@@ -1,0 +1,16 @@
+# Python environments and generated cache files
+.venv/
+__pycache__/
+*.py[cod]
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Raw, generated, and exception datasets
+data/raw/*.csv
+data/processed/*.csv
+data/exceptions/*.csv
+

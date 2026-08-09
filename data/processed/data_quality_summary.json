@@ -1,0 +1,14 @@
+{
+  "raw_rows": 8469,
+  "raw_columns": 17,
+  "clean_rows": 8469,
+  "clean_columns": 29,
+  "exact_duplicates_removed": 0,
+  "duplicate_ticket_id_rows": 0,
+  "invalid_age_rows": 0,
+  "invalid_csat_rows": 0,
+  "invalid_purchase_date_rows": 0,
+  "invalid_first_response_at_rows": 0,
+  "invalid_resolution_at_rows": 0,
+  "negative_resolution_cycle_rows": 1365
+}
