@@ -88,3 +88,125 @@ def build_business_dimensions(
         "priority": build_priority_dimension(silver),
         "status": build_status_dimension(silver),
     }
+
+def build_date_dimension(
+    silver: pd.DataFrame,
+) -> pd.DataFrame:
+    """Build a continuous calendar covering all valid purchase dates."""
+    purchase_dates = (
+        pd.to_datetime(
+            silver["date_of_purchase"], 
+            errors="coerce",
+        )
+        .dropna()
+        .dt.normalize()
+    )
+
+    if purchase_dates.empty:
+        raise ValueError(
+            "Cannot build DimDate because "
+            "date_of_purchase has no valid dates."
+        )
+
+    calendar_dates = pd.date_range(
+        start=purchase_dates.min(),
+        end=purchase_dates.max(),
+        freq="D",
+    )
+
+    dimension = pd.DataFrame(
+        {
+            "date": calendar_dates,
+        }
+    )
+
+    dimension["date_key"] = (
+        dimension["date"]
+        .dt.strftime("%Y%m%d")
+        .astype("int64")
+    )
+
+    dimension["day"] = dimension["date"].dt.day
+
+    dimension["day_of_week_number"] = (
+        dimension["date"].dt.dayofweek + 1
+    )
+
+    day_name = {
+        1: "Monday",
+        2: "Tuesday",
+        3: "Wednesday",
+        4: "Thursday",
+        5: "Friday",
+        6: "Saturday",
+        7: "Sunday",
+    }
+
+    dimension["day_name"] = dimension["day_of_week_number"].map(day_name)
+
+    dimension["month_number"] = dimension["date"].dt.month
+
+    month_name = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September", 
+        10: "October",
+        11: "November",
+        12: "December",
+    }
+
+    dimension["month_name"] = dimension["month_number"].map(month_name)
+
+    dimension["quarter"] = (
+        "Q"
+        + dimension["date"]
+        .dt.quarter
+        .astype("string")
+    )
+
+    dimension["year"] = dimension["date"].dt.year
+
+    dimension["year_month"] = (
+        dimension["date"]
+        .dt.strftime("%Y-%m")
+    )
+
+    dimension["is_weekend"] = (
+        dimension["day_of_week_number"]
+        .isin([6, 7])
+    )
+
+    dimension = dimension[
+        [
+            "date_key",
+            "date",
+            "day",
+            "day_of_week_number",
+            "day_name",
+            "month_number",
+            "month_name",
+            "quarter",
+            "year",
+            "year_month",
+            "is_weekend",
+        ]
+    ]
+
+    return dimension
+
+
+def build_all_dimensions(
+    silver: pd.DataFrame,
+) -> dict[str, pd.DataFrame]:
+    """Build all dimensions used by FactTicket."""
+    dimensions = build_business_dimensions(silver)
+
+    dimensions["date"] = build_date_dimension(silver)
+
+    return dimensions

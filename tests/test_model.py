@@ -9,6 +9,13 @@ from src.model_utils import (
 
 from src.build_model import (
     build_business_dimensions,
+    build_date_dimension,
+)
+
+from src.build_model import (
+    build_all_dimensions,
+    build_business_dimensions,
+    build_channel_dimension,
 )
 
 
@@ -174,6 +181,66 @@ class BuildBusinessDimensionTests(unittest.TestCase):
             self.assertTrue(dimension[key_column].is_unique)
             self.assertFalse(dimension[key_column].isna().any())
 
+class DateDimensionTests(unittest.TestCase):
+    def test_build_date_dimension_creates_continuous_calendar(self) -> None:
+        source = pd.DataFrame(
+            {
+                "date_of_purchase": [
+                    "2024-01-01",
+                    "2024-01-03",
+                ]
+            }
+        )
+        dimension = build_date_dimension(source)
+
+        self.assertEqual(len(dimension), 3)
+        self.assertEqual(
+            dimension["date_key"].tolist(),
+            [
+                20240101,
+                20240102,
+                20240103,
+            ],
+        )
+
+        middle_date = dimension.iloc[1]
+        self.assertEqual(
+            middle_date["day_name"], 
+            "Tuesday"
+        )
+
+        self.assertEqual(
+            middle_date["month_name"], 
+            "January"
+        )
+
+        self.assertEqual(
+            middle_date["quarter"], 
+            "Q1"
+        )
+
+        self.assertEqual(
+            middle_date["year_month"], 
+            "2024-01"
+        )
+
+        self.assertFalse(middle_date["is_weekend"])
+
+    def test_build_date_dimension_rejects_no_valid_dates(self) -> None:
+        source = pd.DataFrame(
+            {
+                "date_of_purchase": [
+                    None,
+                    "invalid-date",
+                ]
+            }
+        )
+
+        with self.assertRaisesRegex(
+            ValueError, 
+            "no valid dates",
+        ):
+            build_date_dimension(source)
 
 if __name__ == "__main__":
     unittest.main()
