@@ -7,6 +7,10 @@ from src.model_utils import (
     build_dimension,
 )
 
+from src.build_model import (
+    build_business_dimensions,
+)
+
 
 class BuildDimensionTests(unittest.TestCase):
     def test_build_dimension_single_attribute(self) -> None:
@@ -128,6 +132,47 @@ class AttachDimensionKeyTests(unittest.TestCase):
                 attributes=["product_purchased"],
                 key_name="product_key",
             )
+
+
+class BuildBusinessDimensionTests(unittest.TestCase):
+    def test_build_business_dimensions(self) -> None:
+        source = pd.DataFrame(
+            {
+                "ticket_id": [1, 2, 3],
+                "product_purchased": ["Phone", "Laptop", "Phone"],
+                "ticket_type": [
+                    "Technical Issue",
+                    "Billing Inquiry",
+                    "Technical Issue",
+                ],
+                "ticket_subject": [
+                    "Software Bug",
+                    "Payment Issue",
+                    "Software Bug",
+                ],
+                "ticket_channel": ["Email", "Chat", "Email"],
+                "ticket_priority": ["High", "Low", "High"],
+                "ticket_status": ["Open", "Closed", "Open"],
+                "customer_age": [25, 42, 25],
+                "customer_gender": ["Female", "Male", "Female"],
+                "customer_age_band": ["25-34", "35-44", "25-34"],
+            }
+        )
+
+        dimensions = build_business_dimensions(source)
+
+        self.assertEqual(len(dimensions["product"]), 2)
+        self.assertEqual(len(dimensions["issue"]), 2)
+        self.assertEqual(len(dimensions["channel"]), 2)
+        self.assertEqual(len(dimensions["priority"]), 2)
+        self.assertEqual(len(dimensions["status"]), 2)
+        self.assertEqual(len(dimensions["customer_profile"]), 2)
+
+        for dimension in dimensions.values():
+            key_column = dimension.columns[0]
+
+            self.assertTrue(dimension[key_column].is_unique)
+            self.assertFalse(dimension[key_column].isna().any())
 
 
 if __name__ == "__main__":
