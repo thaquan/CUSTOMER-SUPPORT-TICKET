@@ -8,15 +8,12 @@ from src.model_utils import (
 )
 
 from src.build_model import (
-    build_business_dimensions,
-    build_date_dimension,
-)
-
-from src.build_model import (
     build_all_dimensions,
     build_business_dimensions,
-    build_channel_dimension,
+    build_date_dimension,
+    build_fact_ticket,
 )
+from src.validate_model import validate_fact_ticket
 
 
 class BuildDimensionTests(unittest.TestCase):
@@ -181,6 +178,7 @@ class BuildBusinessDimensionTests(unittest.TestCase):
             self.assertTrue(dimension[key_column].is_unique)
             self.assertFalse(dimension[key_column].isna().any())
 
+
 class DateDimensionTests(unittest.TestCase):
     def test_build_date_dimension_creates_continuous_calendar(self) -> None:
         source = pd.DataFrame(
@@ -205,22 +203,22 @@ class DateDimensionTests(unittest.TestCase):
 
         middle_date = dimension.iloc[1]
         self.assertEqual(
-            middle_date["day_name"], 
+            middle_date["day_name"],
             "Tuesday"
         )
 
         self.assertEqual(
-            middle_date["month_name"], 
+            middle_date["month_name"],
             "January"
         )
 
         self.assertEqual(
-            middle_date["quarter"], 
+            middle_date["quarter"],
             "Q1"
         )
 
         self.assertEqual(
-            middle_date["year_month"], 
+            middle_date["year_month"],
             "2024-01"
         )
 
@@ -237,10 +235,184 @@ class DateDimensionTests(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(
-            ValueError, 
+            ValueError,
             "no valid dates",
         ):
             build_date_dimension(source)
+
+
+class FactTicketTests(unittest.TestCase):
+    def make_silver_fixture(self) -> pd.DataFrame:
+        return pd.DataFrame(
+            {
+                "ticket_id": [1, 2, 3],
+                "product_purchased": [
+                    "Phone",
+                    "Laptop",
+                    "Phone",
+                ],
+                "ticket_type": [
+                    "Technical Issue",
+                    "Billing Inquiry",
+                    "Technical Issue",
+                ],
+                "ticket_subject": [
+                    "Software Bug",
+                    "Payment Issue",
+                    "Software Bug",
+                ],
+                "ticket_channel": [
+                    "Email",
+                    "Chat",
+                    "Email",
+                ],
+                "ticket_priority": [
+                    "High",
+                    "Low",
+                    "High",
+                ],
+                "ticket_status": [
+                    "Open",
+                    "Closed",
+                    "Open",
+                ],
+                "customer_age": [25, 42, 25],
+                "customer_gender": [
+                    "Female",
+                    "Male",
+                    "Female",
+                ],
+                "customer_age_band": [
+                    "25-34",
+                    "35-44",
+                    "25-34",
+                ],
+                "date_of_purchase": pd.to_datetime(
+                    [
+                        "2024-01-01",
+                        "2024-01-02",
+                        "2024-01-03",
+                    ]
+                ),
+                "first_response_at": pd.to_datetime(
+                    [
+                        "2024-02-01 09:00",
+                        "2024-02-02 09:00",
+                        "2024-02-03 09:00",
+                    ]
+                ),
+                "resolution_at": pd.to_datetime(
+                    [
+                        None,
+                        "2024-02-02 10:00",
+                        None,
+                    ]
+                ),
+                "resolution_cycle_minutes": [
+                    None,
+                    60.0,
+                    None,
+                ],
+                "customer_satisfaction_rating": [
+                    None,
+                    4.0,
+                    None,
+                ],
+                "is_closed": [False, True, False],
+                "has_csat": [False, True, False],
+                "is_low_csat": [False, False, False],
+                "dq_invalid_age": [False, False, False],
+                "dq_invalid_csat": [False, False, False],
+                "dq_invalid_purchase_date": [
+                    False,
+                    False,
+                    False,
+                ],
+                "dq_invalid_first_response_at": [
+                    False,
+                    False,
+                    False,
+                ],
+                "dq_invalid_resolution_at": [
+                    False,
+                    False,
+                    False,
+                ],
+                "dq_negative_resolution_cycle": [
+                    False,
+                    False,
+                    False,
+                ],
+            }
+        )
+
+    def test_build_fact_ticket(self) -> None:
+        silver = self.make_silver_fixture()
+        dimensions = build_all_dimensions(silver)
+
+        fact = build_fact_ticket(
+            silver=silver,
+            dimensions=dimensions,
+        )
+
+        self.assertEqual(len(fact), 3)
+        self.assertTrue(fact["ticket_id"].is_unique)
+
+        foreign_keys = [
+            "customer_profile_key",
+            "product_key",
+            "issue_key",
+            "channel_key",
+            "priority_key",
+            "status_key",
+            "purchase_date_key",
+        ]
+
+        self.assertFalse(
+            fact[foreign_keys]
+            .isna()
+            .any()
+            .any()
+        )
+
+        self.assertEqual(
+            fact["purchase_date_key"].tolist(),
+            [
+                20240101,
+                20240102,
+                20240103,
+            ],
+        )
+
+        for column in [
+            "customer_name",
+            "customer_email",
+            "customer_key",
+            "ticket_description",
+            "resolution",
+        ]:
+            self.assertNotIn(column, fact.columns)
+
+    def test_validate_fact_ticket_rejects_duplicate_ticket_id(self) -> None:
+        silver = self.make_silver_fixture()
+        dimensions = build_all_dimensions(silver)
+        fact = build_fact_ticket(
+            silver=silver,
+            dimensions=dimensions,
+        )
+
+        invalid_fact = fact.copy()
+        invalid_fact.loc[1, "ticket_id"] = 1
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "one row per ticket_id",
+        ):
+            validate_fact_ticket(
+                fact=invalid_fact,
+                expected_row_count=3,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

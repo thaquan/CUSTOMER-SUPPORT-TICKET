@@ -3,7 +3,14 @@
 import pandas as pd
 
 from src.model_config import SILVER_FILE
-from src.model_utils import build_dimension
+from src.model_utils import (
+    attach_dimension_key,
+    build_dimension,
+)
+
+from src.validate_model import (
+    validate_fact_ticket,
+)
 
 
 def load_silver() -> pd.DataFrame:
@@ -210,3 +217,106 @@ def build_all_dimensions(
     dimensions["date"] = build_date_dimension(silver)
 
     return dimensions
+
+def build_fact_ticket(
+    silver: pd.DataFrame,
+    dimensions: dict[str, pd.DataFrame],
+) -> pd.DataFrame:
+    """Build one FactTicket row per unique Silver ticket."""
+    fact = silver.copy()
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=dimensions["customer_profile"],
+        attributes=[
+            "customer_age",
+            "customer_gender",
+            "customer_age_band",
+        ], 
+        key_name="customer_profile_key",
+    )
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=dimensions["product"],
+        attributes=["product_purchased"],
+        key_name="product_key",
+    )
+
+    fact = attach_dimension_key(
+        source=fact, 
+        dimension=dimensions["issue"],
+        attributes=["ticket_type", "ticket_subject"],
+        key_name="issue_key",
+    )
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=dimensions["channel"],
+        attributes=["ticket_channel"],
+        key_name="channel_key",
+    )
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=dimensions["priority"],
+        attributes=["ticket_priority"],
+        key_name="priority_key",
+    )
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=dimensions["status"],
+        attributes=["ticket_status"],
+        key_name="status_key",
+    )
+
+    purchase_date_dimension = (
+        dimensions["date"]
+        .rename(
+            columns={
+                "date_key": "purchase_date_key",
+                "date": "date_of_purchase",
+            }
+        )
+    )
+
+    fact = attach_dimension_key(
+        source=fact,
+        dimension=purchase_date_dimension,
+        attributes=["date_of_purchase"],
+        key_name="purchase_date_key",
+    )
+
+    fact_columns = [
+        "ticket_id",
+        "customer_profile_key",
+        "product_key",
+        "issue_key",
+        "channel_key",
+        "priority_key",
+        "status_key",
+        "purchase_date_key",
+        "first_response_at",
+        "resolution_at",
+        "resolution_cycle_minutes",
+        "customer_satisfaction_rating",
+        "is_closed",
+        "has_csat", 
+        "is_low_csat", 
+        "dq_invalid_age", 
+        "dq_invalid_csat", 
+        "dq_invalid_purchase_date",
+        "dq_invalid_first_response_at",
+        "dq_invalid_resolution_at",
+        "dq_negative_resolution_cycle",   
+    ]
+
+    fact = fact[fact_columns].copy()
+
+    validate_fact_ticket(
+        fact=fact,
+        expected_row_count=len(silver),
+    )
+
+    return fact
