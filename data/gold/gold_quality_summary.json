@@ -1,0 +1,18 @@
+{
+  "silver_rows": 8469,
+  "fact_ticket_rows": 8469,
+  "fact_ticket_columns": 21,
+  "unique_ticket_ids": 8469,
+  "missing_foreign_keys": 0,
+  "dimension_count": 7,
+  "dimension_rows": {
+    "customer_profile": 159,
+    "product": 42,
+    "issue": 80,
+    "channel": 4,
+    "priority": 4,
+    "status": 3,
+    "date": 730
+  },
+  "negative_resolution_cycle_rows": 1365
+}

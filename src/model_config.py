@@ -19,3 +19,16 @@ DIM_CHANNEL_FILE = GOLD_DIR / "dim_channel.csv"
 DIM_PRIORITY_FILE = GOLD_DIR / "dim_priority.csv"
 DIM_STATUS_FILE = GOLD_DIR / "dim_status.csv"
 DIM_DATE_FILE = GOLD_DIR / "dim_date.csv"
+GOLD_QUALITY_FILE = (
+    GOLD_DIR / "gold_quality_summary.json"
+)
+
+DIMENSION_FILES = {
+    "customer_profile": DIM_CUSTOMER_PROFILE_FILE,
+    "product": DIM_PRODUCT_FILE,
+    "issue": DIM_ISSUE_FILE,
+    "channel": DIM_CHANNEL_FILE,
+    "priority": DIM_PRIORITY_FILE,
+    "status": DIM_STATUS_FILE,
+    "date": DIM_DATE_FILE,
+}

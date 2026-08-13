@@ -71,3 +71,134 @@ def validate_fact_ticket(
             "FactTicket contains forbidden public fields: "
             f"{present_forbidden_columns}"
         )
+
+
+def validate_dimension(
+    dimension: pd.DataFrame,
+    key_name: str,
+    attributes: list[str],
+) -> None:
+    """Validate a dimension's surrogate key and declared grain."""
+    required_columns = {
+        key_name,
+        *attributes,
+    }
+
+    missing_columns = sorted(
+        required_columns
+        - set(dimension.columns)
+    )
+
+    if missing_columns:
+        raise ValueError(
+            f"{key_name} dimension is missing columns: "
+            f"{missing_columns}"
+        )
+
+    if dimension.empty:
+        raise ValueError(
+            f"{key_name} dimension is empty."
+        )
+
+    if dimension[key_name].isna().any():
+        raise ValueError(
+            f"{key_name} dimension contains missing surrogate key values."
+        )
+
+    if not dimension[key_name].is_unique:
+        raise ValueError(
+            f"{key_name} dimension must contain one row per surrogate key."
+        )
+
+    if dimension.duplicated(subset=attributes).any():
+        raise ValueError(
+            f"{key_name} dimension violates its grain: {attributes}"
+        )
+
+    missing_attributes = (
+        dimension[attributes]
+        .isna()
+        .sum()
+    )
+
+    invalid_attributes = missing_attributes[
+        missing_attributes > 0
+    ]
+
+    if not invalid_attributes.empty:
+        raise ValueError(
+            f"{key_name} dimension contains "
+            f"missing attributes: "
+            f"{invalid_attributes.to_dict()}"
+        )
+
+
+def validate_dimensions(
+    dimensions: dict[str, pd.DataFrame],
+) -> None:
+    """Validate every dimension required by FactTicket."""
+    specifications = {
+        "customer_profile": {
+            "key": "customer_profile_key",
+            "attributes": [
+                "customer_age",
+                "customer_gender",
+                "customer_age_band",
+            ],
+        },
+        "product": {
+            "key": "product_key",
+            "attributes": [
+                "product_purchased",
+            ],
+        },
+        "issue": {
+            "key": "issue_key",
+            "attributes": [
+                "ticket_type",
+                "ticket_subject",
+            ],
+        },
+        "channel": {
+            "key": "channel_key",
+            "attributes": [
+                "ticket_channel",
+            ],
+        },
+        "priority": {
+            "key": "priority_key",
+            "attributes": [
+                "ticket_priority",
+            ],
+        },
+        "status": {
+            "key": "status_key",
+            "attributes": [
+                "ticket_status",
+            ],
+        },
+        "date": {
+            "key": "date_key",
+            "attributes": [
+                "date",
+            ],
+        },
+    }
+
+    missing_dimensions = sorted(
+        set(specifications)
+        - set(dimensions)
+    )
+
+    if missing_dimensions:
+        raise ValueError(
+            "Missing required dimensions: "
+            f"{missing_dimensions}"
+        )
+
+    for name, specification in specifications.items():
+        validate_dimension(
+            dimension=dimensions[name],
+            key_name=specification["key"],
+            attributes=specification["attributes"],
+        )

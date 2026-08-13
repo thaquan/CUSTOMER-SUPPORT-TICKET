@@ -12,8 +12,12 @@ from src.build_model import (
     build_business_dimensions,
     build_date_dimension,
     build_fact_ticket,
+    build_gold_quality_summary,
 )
-from src.validate_model import validate_fact_ticket
+from src.validate_model import (
+    validate_dimension,
+    validate_fact_ticket,
+)
 
 
 class BuildDimensionTests(unittest.TestCase):
@@ -411,6 +415,42 @@ class FactTicketTests(unittest.TestCase):
             validate_fact_ticket(
                 fact=invalid_fact,
                 expected_row_count=3,
+            )
+
+    def test_build_gold_quality_summary(self) -> None:
+        silver = self.make_silver_fixture()
+        dimensions = build_all_dimensions(silver)
+        fact = build_fact_ticket(
+            silver=silver,
+            dimensions=dimensions,
+        )
+
+        summary = build_gold_quality_summary(
+            silver=silver,
+            fact=fact,
+            dimensions=dimensions,
+        )
+
+        self.assertEqual(summary["silver_rows"], 3)
+        self.assertEqual(summary["fact_ticket_rows"], 3)
+        self.assertEqual(summary["missing_foreign_keys"], 0)
+        self.assertEqual(summary["dimension_count"], 7)
+
+
+class DimensionValidationTests(unittest.TestCase):
+    def test_validate_dimension_rejects_duplicate_grain(self) -> None:
+        invalid_dimension = pd.DataFrame(
+            {
+                "product_key": [1, 2],
+                "product_purchased": ["Phone", "Phone"],
+            }
+        )
+
+        with self.assertRaisesRegex(ValueError, "violates its grain"):
+            validate_dimension(
+                dimension=invalid_dimension,
+                key_name="product_key",
+                attributes=["product_purchased"],
             )
 
 

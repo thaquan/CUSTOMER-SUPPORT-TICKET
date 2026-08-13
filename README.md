@@ -38,7 +38,7 @@ Python cleaning and validation
     ↓
 Silver: support_tickets_clean.csv
     ↓
-Gold: dimensional model (planned)
+Gold: validated dimensional model
     ↓
 SQL analytical layer (planned)
     ↓
@@ -53,6 +53,8 @@ CUSTOMER-SUPPORT-TICKET/
 │   ├── raw/                  # Local raw CSV; not committed
 │   ├── processed/            # Generated Silver CSV; not committed
 │   │   └── data_quality_summary.json
+│   ├── gold/                 # Generated fact/dimension CSVs; not committed
+│   │   └── gold_quality_summary.json
 │   └── exceptions/           # Conflicting records; not committed
 ├── notebooks/
 │   └── 02_gold_model_profiling.ipynb
@@ -61,7 +63,9 @@ CUSTOMER-SUPPORT-TICKET/
 │   ├── config.py             # Paths, expected schema, column groups
 │   ├── transform.py          # Cleaning and feature engineering
 │   ├── utils.py              # Reusable text and key helpers
-│   └── validate.py           # Source and Silver quality gates
+│   ├── validate.py           # Source and Silver quality gates
+│   ├── build_model.py        # Gold star-schema pipeline
+│   └── validate_model.py     # Gold grain, key, and PII quality gates
 ├── tests/
 │   └── test_cleaning.py
 ├── .gitignore
@@ -144,6 +148,14 @@ python -m unittest discover -s tests -v
 
 The test suite covers helper functions, exact duplicates, invalid fractional CSAT, negative resolution cycles, and an end-to-end CSV/JSON integration test.
 
+## Run the Gold Pipeline
+
+```powershell
+python -m src.build_model
+```
+
+The command builds one `fact_ticket` table, seven dimensions, and an auditable Gold quality summary. Generated CSV files remain local; the JSON summary is versioned as evidence of the validated output.
+
 ## Important Limitations
 
 - The published schema has no explicit `ticket_created_at` field.
@@ -159,7 +171,7 @@ The test suite covers helper functions, exact duplicates, invalid fractional CSA
 - [x] Reproducible Python Silver pipeline
 - [x] Automated unit and integration tests
 - [x] Data-quality summary
-- [ ] Gold star schema
+- [x] Gold star schema
 - [ ] PostgreSQL tables and analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
