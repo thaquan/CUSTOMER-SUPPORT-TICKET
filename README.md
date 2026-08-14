@@ -40,7 +40,7 @@ Silver: support_tickets_clean.csv
     ↓
 Gold: validated dimensional model
     ↓
-SQL Server analytical layer (DDL complete)
+SQL Server analytical layer (typed model loaded)
     ↓
 Power BI semantic model and report (planned)
 ```
@@ -157,9 +157,10 @@ sql/01_create_database.sql
 sql/02_create_staging_tables.sql
 sql/03_create_analytics_tables.sql
 sql/04_load_staging.sql
+sql/05_load_analytics.sql
 ```
 
-The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files inside one transaction and reports row counts and line-ending diagnostics.
+The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files, and the analytics loader safely converts text values into typed dimensions and FactTicket inside transactions.
 
 ## Run the Gold Pipeline
 
@@ -187,7 +188,8 @@ The command builds one `fact_ticket` table, seven dimensions, and an auditable G
 - [x] Gold star schema
 - [x] SQL Server database, schemas, and star-schema DDL
 - [x] SQL Server staging bulk load
-- [ ] SQL Server typed analytics load and analytical queries
+- [x] SQL Server typed analytics load
+- [ ] SQL Server validation and analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment
