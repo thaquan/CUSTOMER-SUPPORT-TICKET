@@ -40,7 +40,7 @@ Silver: support_tickets_clean.csv
     ↓
 Gold: validated dimensional model
     ↓
-SQL analytical layer (planned)
+SQL Server analytical layer (DDL complete)
     ↓
 Power BI semantic model and report (planned)
 ```
@@ -148,6 +148,18 @@ python -m unittest discover -s tests -v
 
 The test suite covers helper functions, exact duplicates, invalid fractional CSAT, negative resolution cycles, and an end-to-end CSV/JSON integration test.
 
+## SQL Server DDL
+
+The SQL layer uses separate `staging` and `analytics` schemas. Run these scripts in order with SQL Server Management Studio or `sqlcmd`:
+
+```text
+sql/01_create_database.sql
+sql/02_create_staging_tables.sql
+sql/03_create_analytics_tables.sql
+```
+
+The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys.
+
 ## Run the Gold Pipeline
 
 ```powershell
@@ -172,7 +184,8 @@ The command builds one `fact_ticket` table, seven dimensions, and an auditable G
 - [x] Automated unit and integration tests
 - [x] Data-quality summary
 - [x] Gold star schema
-- [ ] PostgreSQL tables and analytical queries
+- [x] SQL Server database, schemas, and star-schema DDL
+- [ ] SQL Server staging load, typed load, and analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment

@@ -1,0 +1,1 @@
+-- Planned next phase: validate row counts, keys, constraints, and relationships.
