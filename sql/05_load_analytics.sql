@@ -47,8 +47,8 @@ BEGIN TRY
     SELECT
         TRY_CONVERT(INT, customer_profile_key),
         TRY_CONVERT(SMALLINT, customer_age),
-        LTRIM(RTRIM(customer_gender)),
-        LTRIM(RTRIM(customer_age_band))
+        REPLACE(LTRIM(RTRIM(customer_gender)), CHAR(13), ''),
+        REPLACE(LTRIM(RTRIM(customer_age_band)), CHAR(13), '')
     FROM staging.dim_customer_profile;
 
     INSERT INTO analytics.dim_product (
@@ -57,7 +57,7 @@ BEGIN TRY
     )
     SELECT
         TRY_CONVERT(INT, product_key),
-        LTRIM(RTRIM(product_purchased))
+        REPLACE(LTRIM(RTRIM(product_purchased)), CHAR(13), '')
     FROM staging.dim_product;
 
     INSERT INTO analytics.dim_issue (
@@ -67,8 +67,8 @@ BEGIN TRY
     )
     SELECT
         TRY_CONVERT(INT, issue_key),
-        LTRIM(RTRIM(ticket_type)),
-        LTRIM(RTRIM(ticket_subject))
+        REPLACE(LTRIM(RTRIM(ticket_type)), CHAR(13), ''),
+        REPLACE(LTRIM(RTRIM(ticket_subject)), CHAR(13), '')
     FROM staging.dim_issue;
 
     INSERT INTO analytics.dim_channel (
@@ -77,7 +77,7 @@ BEGIN TRY
     )
     SELECT
         TRY_CONVERT(INT, channel_key),
-        LTRIM(RTRIM(ticket_channel))
+        REPLACE(LTRIM(RTRIM(ticket_channel)), CHAR(13), '')
     FROM staging.dim_channel;
 
     INSERT INTO analytics.dim_priority (
@@ -86,7 +86,7 @@ BEGIN TRY
     )
     SELECT
         TRY_CONVERT(INT, priority_key),
-        LTRIM(RTRIM(ticket_priority))
+        REPLACE(LTRIM(RTRIM(ticket_priority)), CHAR(13), '')
     FROM staging.dim_priority;
 
     INSERT INTO analytics.dim_status (
@@ -95,7 +95,7 @@ BEGIN TRY
     )
     SELECT
         TRY_CONVERT(INT, status_key),
-        LTRIM(RTRIM(ticket_status))
+        REPLACE(LTRIM(RTRIM(ticket_status)), CHAR(13), '')
     FROM staging.dim_status;
 
     INSERT INTO analytics.dim_date (
@@ -116,12 +116,12 @@ BEGIN TRY
         TRY_CONVERT(DATE, [date]),
         TRY_CONVERT(TINYINT, [day]),
         TRY_CONVERT(TINYINT, day_of_week_number),
-        LTRIM(RTRIM(day_name)),
+        REPLACE(LTRIM(RTRIM(day_name)), CHAR(13), ''),
         TRY_CONVERT(TINYINT, month_number),
-        LTRIM(RTRIM(month_name)),
-        LTRIM(RTRIM(quarter)),
+        REPLACE(LTRIM(RTRIM(month_name)), CHAR(13), ''),
+        REPLACE(LTRIM(RTRIM(quarter)), CHAR(13), ''),
         TRY_CONVERT(SMALLINT, [year]),
-        LTRIM(RTRIM(year_month)),
+        REPLACE(LTRIM(RTRIM(year_month)), CHAR(13), ''),
         CASE REPLACE(LTRIM(RTRIM(is_weekend)), CHAR(13), '')
             WHEN N'True' THEN CAST(1 AS BIT)
             WHEN N'False' THEN CAST(0 AS BIT)

@@ -158,9 +158,10 @@ sql/02_create_staging_tables.sql
 sql/03_create_analytics_tables.sql
 sql/04_load_staging.sql
 sql/05_load_analytics.sql
+sql/06_validate_model.sql
 ```
 
-The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files, and the analytics loader safely converts text values into typed dimensions and FactTicket inside transactions.
+The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files, and the analytics loader safely converts text values into typed dimensions and FactTicket inside transactions. The validation suite runs 34 repeatable checks covering row reconciliation, uniqueness, relationships, business rules, schema constraints, text cleanliness, and privacy.
 
 ## Run the Gold Pipeline
 
@@ -189,7 +190,8 @@ The command builds one `fact_ticket` table, seven dimensions, and an auditable G
 - [x] SQL Server database, schemas, and star-schema DDL
 - [x] SQL Server staging bulk load
 - [x] SQL Server typed analytics load
-- [ ] SQL Server validation and analytical queries
+- [x] SQL Server model validation
+- [ ] SQL Server analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment
