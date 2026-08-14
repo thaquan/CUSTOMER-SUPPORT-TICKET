@@ -156,9 +156,10 @@ The SQL layer uses separate `staging` and `analytics` schemas. Run these scripts
 sql/01_create_database.sql
 sql/02_create_staging_tables.sql
 sql/03_create_analytics_tables.sql
+sql/04_load_staging.sql
 ```
 
-The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys.
+The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files inside one transaction and reports row counts and line-ending diagnostics.
 
 ## Run the Gold Pipeline
 
@@ -185,7 +186,8 @@ The command builds one `fact_ticket` table, seven dimensions, and an auditable G
 - [x] Data-quality summary
 - [x] Gold star schema
 - [x] SQL Server database, schemas, and star-schema DDL
-- [ ] SQL Server staging load, typed load, and analytical queries
+- [x] SQL Server staging bulk load
+- [ ] SQL Server typed analytics load and analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment
