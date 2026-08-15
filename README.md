@@ -148,7 +148,7 @@ python -m unittest discover -s tests -v
 
 The test suite covers helper functions, exact duplicates, invalid fractional CSAT, negative resolution cycles, and an end-to-end CSV/JSON integration test.
 
-## SQL Server DDL
+## SQL Server Analytics Layer
 
 The SQL layer uses separate `staging` and `analytics` schemas. Run these scripts in order with SQL Server Management Studio or `sqlcmd`:
 
@@ -159,9 +159,10 @@ sql/03_create_analytics_tables.sql
 sql/04_load_staging.sql
 sql/05_load_analytics.sql
 sql/06_validate_model.sql
+sql/07_business_analysis.sql
 ```
 
-The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files, and the analytics loader safely converts text values into typed dimensions and FactTicket inside transactions. The validation suite runs 34 repeatable checks covering row reconciliation, uniqueness, relationships, business rules, schema constraints, text cleanliness, and privacy.
+The typed analytics star schema contains eight tables, seven foreign keys, check constraints, declared dimension grains, and indexes on FactTicket foreign keys. The staging loader bulk-loads all eight local Gold CSV files, and the analytics loader safely converts text values into typed dimensions and FactTicket inside transactions. The validation suite runs 34 repeatable checks covering row reconciliation, uniqueness, relationships, business rules, schema constraints, text cleanliness, and privacy. The business-analysis script provides eight reusable result sets for executive KPIs, backlog, channel, issue, product, priority, purchase-cohort, and data-quality analysis.
 
 ## Run the Gold Pipeline
 
@@ -170,6 +171,15 @@ python -m src.build_model
 ```
 
 The command builds one `fact_ticket` table, seven dimensions, and an auditable Gold quality summary. Generated CSV files remain local; the JSON summary is versioned as evidence of the validated output.
+
+## Initial SQL Findings
+
+- The model contains 8,469 tickets: 2,769 closed and 5,700 in backlog, for a 32.70% resolution rate.
+- CSAT coverage is 32.70%. Among tickets with a response, average CSAT is 2.99 and 39.80% have a low score of 1 or 2.
+- Only 1,404 tickets have a valid resolution-cycle metric. Their average cycle is 454.68 minutes and their median is 380.50 minutes.
+- Email has the highest observed ticket volume (2,143), while Chat has the highest average CSAT (3.08) and lowest observed low-CSAT rate (36.35%) among channels. These are descriptive associations, not causal effects.
+- The largest issue combination is Refund Request / Hardware issue with 129 tickets. Canon EOS has the highest observed product ticket volume with 240 tickets; product ticket volume is not a defect rate because sales volume is unavailable.
+- The source contains 1,365 negative resolution cycles (16.12%). They remain disclosed through a quality flag and are excluded from the analytical duration metric.
 
 ## Important Limitations
 
@@ -191,7 +201,7 @@ The command builds one `fact_ticket` table, seven dimensions, and an auditable G
 - [x] SQL Server staging bulk load
 - [x] SQL Server typed analytics load
 - [x] SQL Server model validation
-- [ ] SQL Server analytical queries
+- [x] SQL Server analytical queries
 - [ ] Power BI semantic model and DAX measures
 - [ ] Multi-page Power BI report
 - [ ] Power BI Service deployment
