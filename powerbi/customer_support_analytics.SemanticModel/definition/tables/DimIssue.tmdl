@@ -1,0 +1,48 @@
+/// Issue dimension containing ticket type and ticket subject for root-cause analysis.
+table DimIssue
+	lineageTag: 49a12f33-6dfd-4707-92eb-84e54296cb08
+
+	/// Surrogate key for the issue dimension.
+	column issue_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dd2748bd-fc15-486f-bef2-afb4b64dc7ec
+		summarizeBy: none
+		sourceColumn: issue_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// High-level classification of the customer support request.
+	column ticket_type
+		dataType: string
+		lineageTag: 230499ee-12db-4caa-bedf-9ac8ee6cdb28
+		summarizeBy: none
+		sourceColumn: ticket_type
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Detailed subject used for issue and root-cause analysis.
+	column ticket_subject
+		dataType: string
+		lineageTag: 34785c30-c625-470d-93c8-89538f8ebb8a
+		summarizeBy: none
+		sourceColumn: ticket_subject
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimIssue = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_issue = Source{[Schema="analytics",Item="dim_issue"]}[Data]
+				in
+				    analytics_dim_issue
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

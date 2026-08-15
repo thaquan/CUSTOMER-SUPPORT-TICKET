@@ -1,0 +1,258 @@
+/// Ticket-level fact table. Grain: one row per support ticket after cleaning and validation.
+table FactTicket
+	lineageTag: c5b5ff5a-4347-4674-9c1a-8bfe080223a7
+
+	/// Source business identifier for a support ticket.
+	column ticket_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17d8ff65-aa83-4b7f-ab75-f40bc794eb28
+		summarizeBy: none
+		sourceColumn: ticket_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimCustomerProfile.
+	column customer_profile_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 62303689-18a9-41af-b062-55b6d807b73a
+		summarizeBy: none
+		sourceColumn: customer_profile_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimProduct.
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ae94ef9e-2311-4611-a431-79eca6a803ad
+		summarizeBy: none
+		sourceColumn: product_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimIssue.
+	column issue_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 58972bda-f0b1-40ca-a100-8922cb5b3ad8
+		summarizeBy: none
+		sourceColumn: issue_key
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimChannel.
+	column channel_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0c9db16a-d106-46c6-9277-cbf81e70bd5d
+		summarizeBy: none
+		sourceColumn: channel_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimPriority.
+	column priority_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 59d46a10-fe7c-4185-9936-fc63dd512d3a
+		summarizeBy: none
+		sourceColumn: priority_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimStatus.
+	column status_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b5dfd9b9-1b58-407b-a7a3-1ed16c189ae1
+		summarizeBy: none
+		sourceColumn: status_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Foreign key to DimDate based on purchase date.
+	column purchase_date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7ca5723c-7c54-4e00-9c85-803d90d84c3e
+		summarizeBy: none
+		sourceColumn: purchase_date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Recorded timestamp of the first support response.
+	column first_response_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7699503a-df88-4948-ba49-6778478f2ebe
+		summarizeBy: none
+		sourceColumn: first_response_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Recorded timestamp when the ticket was resolved.
+	column resolution_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 03f819f4-64b0-4c69-b448-3d8acd295d98
+		summarizeBy: none
+		sourceColumn: resolution_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Validated elapsed minutes between first response and resolution; blank for invalid or negative cycles.
+	column resolution_cycle_minutes
+		dataType: double
+		lineageTag: bfcaa6f6-49cb-47dc-a428-3148e108e715
+		summarizeBy: none
+		sourceColumn: resolution_cycle_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Customer satisfaction rating on the source 1–5 scale; blank when no rating was submitted.
+	column customer_satisfaction_rating
+		dataType: double
+		lineageTag: 7a2cc12c-92f8-4786-af36-f7915fc9ca77
+		summarizeBy: none
+		sourceColumn: customer_satisfaction_rating
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Technical flag indicating whether the ticket status is Closed.
+	column is_closed
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d46c5407-23d4-4b01-bf40-9a94fb6a44db
+		summarizeBy: none
+		sourceColumn: is_closed
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Technical flag indicating whether the ticket has a valid CSAT response.
+	column has_csat
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bfe37e68-1e9f-43c5-a2f3-c48970d8e197
+		summarizeBy: none
+		sourceColumn: has_csat
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Technical flag indicating a valid CSAT rating of 1 or 2.
+	column is_low_csat
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9d05724c-636d-4047-a719-90363e402161
+		summarizeBy: none
+		sourceColumn: is_low_csat
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag for an invalid customer age.
+	column dq_invalid_age
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2a93eca0-6125-44df-bc6b-9df540ee7735
+		summarizeBy: none
+		sourceColumn: dq_invalid_age
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag for an invalid CSAT value.
+	column dq_invalid_csat
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fc482914-981a-4094-bff3-77d89f717a0a
+		summarizeBy: none
+		sourceColumn: dq_invalid_csat
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag for an invalid purchase date.
+	column dq_invalid_purchase_date
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 73b245d4-fd2e-4eaa-9bc0-a32cc7571900
+		summarizeBy: none
+		sourceColumn: dq_invalid_purchase_date
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag for an invalid first-response timestamp.
+	column dq_invalid_first_response_at
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 142de2e3-5c7e-4c99-b2be-f1cb41d969aa
+		summarizeBy: none
+		sourceColumn: dq_invalid_first_response_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag for an invalid resolution timestamp.
+	column dq_invalid_resolution_at
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cbf53b1a-f9f1-4f41-ac1f-2e3bc4bd6265
+		summarizeBy: none
+		sourceColumn: dq_invalid_resolution_at
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Data-quality flag indicating resolution precedes first response.
+	column dq_negative_resolution_cycle
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d5508e6c-2c37-4319-8826-81726851ad09
+		summarizeBy: none
+		sourceColumn: dq_negative_resolution_cycle
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactTicket = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_fact_ticket = Source{[Schema="analytics",Item="fact_ticket"]}[Data]
+				in
+				    analytics_fact_ticket
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

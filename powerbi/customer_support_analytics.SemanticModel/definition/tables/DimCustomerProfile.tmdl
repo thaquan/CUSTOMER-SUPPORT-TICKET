@@ -1,0 +1,58 @@
+/// Pseudonymized customer demographic dimension for age-band and gender analysis.
+table DimCustomerProfile
+	lineageTag: b53cec6b-babd-43bf-a5aa-36a8ab440241
+
+	/// Surrogate key for the pseudonymized customer profile.
+	column customer_profile_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 32b4a088-f702-4d22-8ba2-94e9bf082b81
+		summarizeBy: none
+		sourceColumn: customer_profile_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Customer age retained after validation.
+	column customer_age
+		dataType: int64
+		formatString: 0
+		lineageTag: 89916db2-62cb-4d56-8df7-c95f368387c6
+		summarizeBy: none
+		sourceColumn: customer_age
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Standardized customer gender category.
+	column customer_gender
+		dataType: string
+		lineageTag: 22d9e03b-24a8-43a6-8d3b-f2a731bac6d5
+		summarizeBy: none
+		sourceColumn: customer_gender
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Derived age band for demographic analysis.
+	column customer_age_band
+		dataType: string
+		lineageTag: 6588d55a-38bf-4685-b68e-e24f3c79f748
+		summarizeBy: none
+		sourceColumn: customer_age_band
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCustomerProfile = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_customer_profile = Source{[Schema="analytics",Item="dim_customer_profile"]}[Data]
+				in
+				    analytics_dim_customer_profile
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,39 @@
+/// Ticket status dimension used to distinguish closed tickets from unresolved workload.
+table DimStatus
+	lineageTag: 49807e4b-fe2b-4d8e-9f9a-f90cfe0ceaf4
+
+	/// Surrogate key for the status dimension.
+	column status_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 387471f4-6148-41bb-a9b3-99e9419a03d6
+		summarizeBy: none
+		sourceColumn: status_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Current lifecycle status of the support ticket.
+	column ticket_status
+		dataType: string
+		lineageTag: ce4c4746-edb4-461e-a98e-0ed8025bdf8d
+		summarizeBy: none
+		sourceColumn: ticket_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimStatus = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_status = Source{[Schema="analytics",Item="dim_status"]}[Data]
+				in
+				    analytics_dim_status
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

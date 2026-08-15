@@ -1,0 +1,160 @@
+/// Conformed purchase-date dimension used for time filtering and grouping.
+table DimDate
+	lineageTag: b07e9f2c-899b-4b76-ad8e-5b78cad7da47
+	dataCategory: Time
+
+	/// Integer surrogate key for the calendar date.
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 816f9103-e3d1-42c0-a931-b09b4bde312b
+		summarizeBy: none
+		sourceColumn: date_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar date related to the product purchase.
+	column date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 3e31abfe-1eb2-432e-9be4-2ec3137afdb3
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Day number within the month.
+	column day
+		dataType: int64
+		formatString: 0
+		lineageTag: e45f2672-7816-437e-ab8c-dfa89372544b
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Numeric weekday order used to sort day names.
+	column day_of_week_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f6c3aa9-5861-4719-bf2a-c5c94204fe39
+		summarizeBy: none
+		sourceColumn: day_of_week_number
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar weekday name.
+	column day_name
+		dataType: string
+		lineageTag: 239581db-bc8f-4ba8-8af6-ed28bba84d34
+		summarizeBy: none
+		sourceColumn: day_name
+		sortByColumn: day_of_week_number
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Numeric month order used to sort month names.
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e7a0506-cbfb-481d-bf6f-0ad792561dde
+		summarizeBy: none
+		sourceColumn: month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar month name.
+	column month_name
+		dataType: string
+		lineageTag: 124a8098-d733-47f5-bb60-2fd4efae668e
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_number
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar quarter label.
+	column quarter
+		dataType: string
+		lineageTag: 3a02ceb1-6ef0-496e-8f69-80b8f548d343
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar year.
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 785b25fb-fa50-448b-9534-af3bc1b39de9
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Year-month label for chronological reporting.
+	column year_month
+		dataType: string
+		lineageTag: 3a42ba54-e264-4fd5-9e80-7615d0a1c9b0
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Flag indicating whether the date falls on a weekend.
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 12b79f9b-d5d3-48e5-8ac2-bec6b8f92876
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar hierarchy for analyzing tickets by product purchase date.
+	hierarchy 'Purchase Date'
+		lineageTag: fbc0815a-d376-464e-b1e3-afc10bc386f9
+
+		/// Calendar year.
+		level Year
+			lineageTag: 759e020c-dda0-4fb1-a5e0-43023b94e9a5
+			column: year
+
+		/// Calendar quarter.
+		level Quarter
+			lineageTag: 50d3f408-a574-4aa9-9c97-42602d7c527d
+			column: quarter
+
+		/// Calendar month.
+		level Month
+			lineageTag: 43680e7e-0025-415f-87d5-f7a37869106e
+			column: month_name
+
+		/// Individual purchase date.
+		level Date
+			lineageTag: 8dbff097-53aa-46a7-9220-d9c6fdfec2d9
+			column: date
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_date = Source{[Schema="analytics",Item="dim_date"]}[Data]
+				in
+				    analytics_dim_date
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

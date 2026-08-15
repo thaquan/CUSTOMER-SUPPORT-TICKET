@@ -1,0 +1,39 @@
+/// Product dimension used to analyze support demand by purchased product.
+table DimProduct
+	lineageTag: c308664f-e488-4c2a-a544-86108178b034
+
+	/// Surrogate key for the product dimension.
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a709e0dc-2578-472d-891c-3d0ca488b824
+		summarizeBy: none
+		sourceColumn: product_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Purchased product associated with the support ticket.
+	column product_purchased
+		dataType: string
+		lineageTag: 9aad3801-5634-4ae0-a21f-88ce19628da4
+		summarizeBy: none
+		sourceColumn: product_purchased
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_product = Source{[Schema="analytics",Item="dim_product"]}[Data]
+				in
+				    analytics_dim_product
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

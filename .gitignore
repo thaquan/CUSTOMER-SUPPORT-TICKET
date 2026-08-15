@@ -10,6 +10,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Local authoring utilities and Power BI workspace cache
+/tools/
+powerbi/**/.pbi/
+
 # Raw, generated, and exception datasets
 data/raw/*.csv
 data/processed/*.csv

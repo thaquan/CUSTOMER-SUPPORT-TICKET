@@ -1,0 +1,42 @@
+relationship ee9e22a2-c2ff-42d1-8463-ee694992cc30
+	fromColumn: FactTicket.product_key
+	toColumn: DimProduct.product_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 919fb70f-b04c-4182-8998-ea8e37ee3026
+	fromColumn: FactTicket.issue_key
+	toColumn: DimIssue.issue_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 2b761ef0-74e4-45dc-bd8e-4ff16c6b4f8c
+	fromColumn: FactTicket.channel_key
+	toColumn: DimChannel.channel_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship b8243b0d-eff1-4d1b-a94a-401aaf44ab81
+	fromColumn: FactTicket.priority_key
+	toColumn: DimPriority.priority_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship b6a8af4c-71e6-4017-8935-5f94a63af614
+	fromColumn: FactTicket.status_key
+	toColumn: DimStatus.status_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 4b98f89b-855a-4ad3-9460-6ca69feb8b7e
+	fromColumn: FactTicket.customer_profile_key
+	toColumn: DimCustomerProfile.customer_profile_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship e51e5cff-7461-4380-9db8-65fc57d6e54b
+	fromColumn: FactTicket.purchase_date_key
+	toColumn: DimDate.date_key
+
+	annotation PBI_IsFromSource = FS
+

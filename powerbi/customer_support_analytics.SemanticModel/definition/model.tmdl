@@ -1,0 +1,29 @@
+/// E-commerce customer support analytics semantic model using a ticket-level fact table and conformed dimensions.
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DimProduct","DimIssue","DimChannel","DimPriority","DimStatus","FactTicket","DimDate","DimCustomerProfile","_Measures"]
+
+annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
+
+ref table DimProduct
+ref table DimIssue
+ref table DimChannel
+ref table DimPriority
+ref table DimStatus
+ref table FactTicket
+ref table DimDate
+ref table DimCustomerProfile
+ref table _Measures
+
+ref cultureInfo en-US
+

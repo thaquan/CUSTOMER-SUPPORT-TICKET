@@ -1,0 +1,152 @@
+/// Dedicated table containing explicit business KPI measures.
+table _Measures
+	lineageTag: 08275236-3032-46ee-8e3b-851dd9f442bf
+
+	/// Distinct count of support ticket IDs in the current filter context.
+	measure 'Total Tickets' = COUNTROWS(FactTicket)
+		formatString: #,0
+		displayFolder: Ticket Volume
+		lineageTag: 773a63e4-6987-4e85-9bc2-8da89a746a84
+
+	/// Number of tickets whose standardized status is Closed.
+	measure 'Closed Tickets' = ```
+			
+			CALCULATE(
+			    [Total Tickets], 
+			    FactTicket[is_closed] = TRUE())
+			```
+		formatString: #,0
+		displayFolder: Ticket Volume
+		lineageTag: 6dc9a66c-9da4-4b6e-9306-32c625265948
+
+	/// Number of tickets not currently classified as Closed.
+	measure 'Backlog Tickets' =
+			
+			[Total Tickets] - [Closed Tickets]
+		formatString: #,0
+		displayFolder: Ticket Volume
+		lineageTag: 00db6b6a-bb3b-43d2-8c00-05c86742ba7b
+
+	/// Closed Tickets divided by Total Tickets in the current filter context.
+	measure 'Resolution Rate' = ```
+			
+			DIVIDE(
+			    [Closed Tickets], 
+			    [Total Tickets])
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Ticket Volume
+		lineageTag: 4995fa3e-b38e-4c7e-b473-abc8fef90068
+
+	/// Number of tickets with a valid customer satisfaction rating.
+	measure 'CSAT Responses' =
+			
+			COUNT(FactTicket[customer_satisfaction_rating])
+		formatString: #,0
+		displayFolder: Customer Experience
+		lineageTag: d5d2c49e-bb69-4710-a83f-10b34b5f39f9
+
+	/// CSAT Responses divided by Total Tickets. This measures survey coverage across all tickets, not only closed tickets.
+	measure 'CSAT Response Rate' = ```
+			
+			DIVIDE(
+			    [CSAT Responses], 
+			    [Total Tickets])
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Customer Experience
+		lineageTag: 7e82a569-1dbe-45fc-a03b-4ea6159fde28
+
+	/// Average valid customer satisfaction rating on the 1–5 scale.
+	measure 'Average CSAT' =
+			
+			AVERAGE(FactTicket[customer_satisfaction_rating])
+		formatString: 0.00
+		displayFolder: Customer Experience
+		lineageTag: b9f17ac1-e7af-4606-bfd5-c9e3b11bc8bb
+
+	/// Number of rated tickets with a CSAT rating of 1 or 2.
+	measure 'Low CSAT Tickets' = ```
+			
+			CALCULATE(
+			    [Total Tickets], 
+			    FactTicket[is_low_csat] = TRUE())
+			```
+		formatString: #,0
+		displayFolder: Customer Experience
+		lineageTag: eaf9c130-0ab1-4ea6-93ab-f5011b81526f
+
+	/// Low CSAT Tickets divided by CSAT Responses.
+	measure 'Low CSAT Rate' =
+			
+			DIVIDE(
+			    [Low CSAT Tickets],
+			    [CSAT Responses]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Customer Experience
+		lineageTag: 2d10dd7b-cf76-4bf4-a642-7cd468da3b10
+
+	/// Number of nonblank validated resolution-cycle values. Invalid and negative temporal records are excluded.
+	measure 'Valid Resolution Cycles' =
+			
+			COUNT(FactTicket[resolution_cycle_minutes])
+		formatString: #,0
+		displayFolder: Resolution Cycle
+		lineageTag: 6ae145ce-7dad-4167-909e-e4e4d74447d0
+
+	/// Average resolution-cycle minutes calculated only from validated nonnegative cycles.
+	measure 'Average Resolution Cycle Minutes' =
+			
+			AVERAGE(FactTicket[resolution_cycle_minutes])
+		formatString: #,0.00
+		displayFolder: Resolution Cycle
+		lineageTag: 228f965f-96b2-460d-9f90-6a58a223d512
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Median resolution-cycle minutes calculated only from validated nonnegative cycles.
+	measure 'Median Resolution Cycle Minutes' =
+			
+			MEDIAN(FactTicket[resolution_cycle_minutes])
+		formatString: #,0.00
+		displayFolder: Resolution Cycle
+		lineageTag: 7c75e88a-dfc9-4cea-9df6-e7330170ddca
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Count of tickets where resolution precedes first response; excluded from resolution-cycle KPIs.
+	measure 'Negative Resolution Cycle Rows' =
+			
+			CALCULATE(
+			    [Total Tickets],
+			    FactTicket[dq_negative_resolution_cycle] = TRUE()
+			)
+		formatString: #,0
+		displayFolder: Data Quality
+		lineageTag: 11077db4-bd59-48a8-aef5-017722def9ca
+
+	/// Hidden placeholder column required by the dedicated measures table.
+	column Placeholder
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d1244198-46b2-4c89-911c-a0224caa8083
+		summarizeBy: sum
+		sourceColumn: Placeholder
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Placeholder = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Placeholder", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

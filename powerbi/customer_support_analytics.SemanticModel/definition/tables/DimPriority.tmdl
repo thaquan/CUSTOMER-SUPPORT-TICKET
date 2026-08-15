@@ -1,0 +1,39 @@
+/// Ticket priority dimension used to analyze workload urgency and backlog.
+table DimPriority
+	lineageTag: ab28c82a-909d-410a-adbd-fccfade533fa
+
+	/// Surrogate key for the priority dimension.
+	column priority_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b74993e9-5ab3-4d58-8753-a4118c011d91
+		summarizeBy: none
+		sourceColumn: priority_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Operational urgency assigned to the support ticket.
+	column ticket_priority
+		dataType: string
+		lineageTag: ac650568-57bf-4b8b-94b8-bdda7bef8c70
+		summarizeBy: none
+		sourceColumn: ticket_priority
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimPriority = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_priority = Source{[Schema="analytics",Item="dim_priority"]}[Data]
+				in
+				    analytics_dim_priority
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

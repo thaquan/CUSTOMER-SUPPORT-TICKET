@@ -1,0 +1,39 @@
+/// Support channel dimension used to compare ticket volume and customer experience.
+table DimChannel
+	lineageTag: ff752601-3614-48f5-a9f6-ee683ae3912a
+
+	/// Surrogate key for the channel dimension.
+	column channel_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fb96b5e2-a29e-4114-b709-3271b4799571
+		summarizeBy: none
+		sourceColumn: channel_key
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Channel through which the customer contacted support.
+	column ticket_channel
+		dataType: string
+		lineageTag: 0c6048cc-93a0-4884-b922-0a9599c11a52
+		summarizeBy: none
+		sourceColumn: ticket_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimChannel = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(".\SQLEXPRESS", "CustomerSupportAnalytics"),
+				    analytics_dim_channel = Source{[Schema="analytics",Item="dim_channel"]}[Data]
+				in
+				    analytics_dim_channel
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
