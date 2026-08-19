@@ -126,6 +126,42 @@ table _Measures
 		displayFolder: Data Quality
 		lineageTag: 11077db4-bd59-48a8-aef5-017722def9ca
 
+	/// Number of non-closed tickets with Critical or High priority in the current filter context.
+	measure 'Critical High Backlog' =
+			
+			CALCULATE (
+			    [Backlog Tickets],
+			    KEEPFILTERS (
+			        DimPriority[ticket_priority]
+			            IN { "Critical", "High" }
+			    )
+			)
+		formatString: #,0
+		displayFolder: Ticket Volume
+		lineageTag: 44a5b4fc-531e-4e83-b8fd-3fe29abd24c8
+
+	/// Validated nonnegative resolution cycles divided by Closed Tickets in the current filter context.
+	measure 'Valid Resolution Cycle Rate' =
+			
+			DIVIDE(
+			    [Valid Resolution Cycles],
+			    [Closed Tickets]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Resolution Cycle
+		lineageTag: 25f8ad2b-a4aa-47e7-a705-d9107d7c17af
+
+	/// Negative resolution-cycle rows divided by Closed Tickets in the current filter context.
+	measure 'Negative Resolution Cycle Rate' =
+			
+			DIVIDE(
+			    [Negative Resolution Cycle Rows],
+			    [Closed Tickets]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Data Quality
+		lineageTag: fe712caa-7711-406f-843f-df461a786d55
+
 	/// Hidden placeholder column required by the dedicated measures table.
 	column Placeholder
 		dataType: int64

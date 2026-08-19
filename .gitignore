@@ -13,6 +13,7 @@ Thumbs.db
 # Local authoring utilities and Power BI workspace cache
 /tools/
 powerbi/**/.pbi/
+powerbi/*.pbix
 
 # Raw, generated, and exception datasets
 data/raw/*.csv
