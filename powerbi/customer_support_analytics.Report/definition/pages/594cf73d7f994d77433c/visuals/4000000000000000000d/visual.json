@@ -2,37 +2,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "4000000000000000000d",
   "position": {
-    "x": 20,
-    "y": 246,
-    "z": 20,
-    "height": 210,
-    "width": 408,
-    "tabOrder": 12
+    "x": 294,
+    "y": 114,
+    "z": 30,
+    "height": 48,
+    "width": 118,
+    "tabOrder": 30
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "cardVisual",
     "query": {
       "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "DimChannel"
-                    }
-                  },
-                  "Property": "ticket_channel"
-                }
-              },
-              "queryRef": "DimChannel.ticket_channel",
-              "nativeQueryRef": "ticket_channel",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
+        "Data": {
           "projections": [
             {
               "field": {
@@ -42,25 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Valid Resolution Cycles"
+                  "Property": "Valid Resolution Cycle Rate"
                 }
               },
-              "queryRef": "_Measures.Valid Resolution Cycles",
-              "nativeQueryRef": "Valid Resolution Cycles"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Negative Resolution Cycle Rows"
-                }
-              },
-              "queryRef": "_Measures.Negative Resolution Cycle Rows",
-              "nativeQueryRef": "Negative Resolution Cycle Rows"
+              "queryRef": "_Measures.Valid Resolution Cycle Rate",
+              "nativeQueryRef": "Valid Resolution Cycle Rate"
             }
           ]
         }
@@ -75,162 +42,77 @@
                     "Entity": "_Measures"
                   }
                 },
-                "Property": "Valid Resolution Cycles"
+                "Property": "Valid Resolution Cycle Rate"
               }
             },
             "direction": "Descending"
           }
-        ]
+        ],
+        "isDefaultSort": true
       }
     },
+    "drillFilterOtherVisuals": true,
     "objects": {
-      "dataPoint": [
+      "value": [
         {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#16A37A'"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "selector": {
-            "metadata": "_Measures.Valid Resolution Cycles"
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E98A15'"
-                    }
-                  }
-                }
-              }
-            }
+            "id": "default"
           },
-          "selector": {
-            "metadata": "_Measures.Negative Resolution Cycle Rows"
-          }
-        }
-      ],
-      "labels": [
-        {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
                   "Value": "true"
-                }
-              }
-            },
-            "labelPosition": {
-              "expr": {
-                "Literal": {
-                  "Value": "'OutsideEnd'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "11D"
                 }
               }
             },
-            "color": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
               "solid": {
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#667085'"
+                      "Value": "'#392691'"
                     }
                   }
                 }
               }
-            }
-          }
-        }
-      ],
-      "legend": [
-        {
-          "properties": {
-            "show": {
+            },
+            "horizontalAlignment": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "'left'"
                 }
               }
             },
-            "position": {
+            "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "'Top'"
+                  "Value": "'0'"
                 }
               }
             }
           }
         }
       ],
-      "categoryAxis": [
+      "label": [
         {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "showAxisTitle": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "9D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "valueAxis": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "showAxisTitle": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "visualContainerObjects": {
-      "title": [
-        {
+          "selector": {
+            "id": "default"
+          },
           "properties": {
             "show": {
               "expr": {
@@ -242,14 +124,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Valid vs Negative Cycles by Channel'"
+                  "Value": "'valid cycle rate'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "9D"
                 }
               }
             },
@@ -258,13 +140,27 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#172033'"
+                      "Value": "'#74728A'"
                     }
                   }
                 }
               }
             },
-            "bold": {
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'belowValue'"
+                }
+              }
+            },
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "textWrap": {
               "expr": {
                 "Literal": {
                   "Value": "true"
@@ -274,6 +170,109 @@
           }
         }
       ],
+      "layout": [
+        {
+          "selector": {
+            "id": "default"
+          },
+          "properties": {
+            "style": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cards'"
+                }
+              }
+            },
+            "paddingUniform": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "backgroundShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "borderWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "gridlineWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "lineWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "fillCustom": [
+        {
+          "selector": {
+            "id": "default"
+          },
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fillColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EEEAFE'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outline": [
+        {
+          "selector": {
+            "id": "default"
+          },
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
       "background": [
         {
           "properties": {
@@ -289,7 +288,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#EEEAFE'"
                     }
                   }
                 }
@@ -320,7 +319,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E4E7EC'"
+                      "Value": "'#EEEAFE'"
                     }
                   }
                 }
@@ -329,7 +328,14 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }
@@ -342,28 +348,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "4D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "4D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "4D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "4D"
                 }
               }
             }

@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "40000000000000000002",
   "position": {
-    "x": 650,
-    "y": 16,
-    "z": 2,
-    "height": 34,
-    "width": 590,
-    "tabOrder": 1
+    "x": 20,
+    "y": 18,
+    "z": 10,
+    "height": 56,
+    "width": 112,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "textbox",
@@ -19,15 +19,29 @@
               {
                 "textRuns": [
                   {
-                    "value": "Cycle KPIs use validated nonnegative records only",
+                    "value": "CS",
                     "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "10px",
-                      "color": "#667085"
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "26px",
+                      "fontWeight": "bold",
+                      "color": "#FFFFFF"
                     }
                   }
                 ],
-                "horizontalTextAlignment": "right"
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SUPPORT ANALYTICS",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "8px",
+                      "color": "#D8D1FF"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
               }
             ]
           }

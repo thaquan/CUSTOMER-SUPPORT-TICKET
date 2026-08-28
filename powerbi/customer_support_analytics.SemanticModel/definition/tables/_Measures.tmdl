@@ -126,20 +126,6 @@ table _Measures
 		displayFolder: Data Quality
 		lineageTag: 11077db4-bd59-48a8-aef5-017722def9ca
 
-	/// Number of non-closed tickets with Critical or High priority in the current filter context.
-	measure 'Critical High Backlog' =
-			
-			CALCULATE (
-			    [Backlog Tickets],
-			    KEEPFILTERS (
-			        DimPriority[ticket_priority]
-			            IN { "Critical", "High" }
-			    )
-			)
-		formatString: #,0
-		displayFolder: Ticket Volume
-		lineageTag: 44a5b4fc-531e-4e83-b8fd-3fe29abd24c8
-
 	/// Validated nonnegative resolution cycles divided by Closed Tickets in the current filter context.
 	measure 'Valid Resolution Cycle Rate' =
 			
@@ -161,6 +147,154 @@ table _Measures
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Data Quality
 		lineageTag: fe712caa-7711-406f-843f-df461a786d55
+
+	/// Number of non-closed tickets with Critical or High priority in the current filter context.
+	measure 'Critical High Backlog' =
+			
+			CALCULATE (
+			    [Backlog Tickets],
+			    KEEPFILTERS (
+			        DimPriority[ticket_priority]
+			            IN { "Critical", "High" }
+			    )
+			)
+		formatString: #,0
+		displayFolder: Ticket Volume
+		lineageTag: 44a5b4fc-531e-4e83-b8fd-3fe29abd24c8
+
+	/// Backlog Tickets divided by Total Tickets in the current filter context.
+	measure 'Backlog Rate' = DIVIDE([Backlog Tickets], [Total Tickets])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Ticket Volume
+		lineageTag: 3ebacc8f-b1e3-4d3f-a021-2e5fa11ec6d5
+
+	/// Latest purchase year visible in the current selection; used as the current cohort comparison year.
+	measure 'Latest Purchase Cohort Year' = MAXX(ALLSELECTED(DimDate[year]), DimDate[year])
+		formatString: 0
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 99ff97bb-aed5-4178-824d-8ea91ac64f0a
+
+	/// Total tickets for the latest purchase-year cohort visible in the current selection while preserving other filters such as month.
+	measure 'Latest Cohort Total Tickets' =
+			VAR CohortYear = [Latest Purchase Cohort Year]
+			RETURN CALCULATE([Total Tickets], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 0ab129ab-892e-4905-8111-006f602bf72e
+
+	/// Total tickets for the purchase-year cohort immediately before the latest visible cohort.
+	measure 'Prior Cohort Total Tickets' =
+			VAR CohortYear = [Latest Purchase Cohort Year] - 1
+			RETURN CALCULATE([Total Tickets], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: a713d517-0694-4762-b752-ab4629271c23
+
+	/// Percentage change in total tickets between the latest and prior purchase-year cohorts.
+	measure 'Total Tickets Cohort YoY %' = DIVIDE([Latest Cohort Total Tickets] - [Prior Cohort Total Tickets], [Prior Cohort Total Tickets])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 85b7fb57-af93-4ebc-a023-52674bcd4138
+
+	/// Backlog tickets for the latest visible purchase-year cohort.
+	measure 'Latest Cohort Backlog Tickets' =
+			VAR CohortYear = [Latest Purchase Cohort Year]
+			RETURN CALCULATE([Backlog Tickets], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 00c2d52b-74a9-42fc-8281-184b8bbbdf54
+
+	/// Backlog tickets for the prior purchase-year cohort.
+	measure 'Prior Cohort Backlog Tickets' =
+			VAR CohortYear = [Latest Purchase Cohort Year] - 1
+			RETURN CALCULATE([Backlog Tickets], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 97edd858-fbee-480f-809d-5923dc755896
+
+	/// Percentage change in backlog tickets between the latest and prior purchase-year cohorts; lower is better.
+	measure 'Backlog Tickets Cohort YoY %' = DIVIDE([Latest Cohort Backlog Tickets] - [Prior Cohort Backlog Tickets], [Prior Cohort Backlog Tickets])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 77b42ff2-c880-438b-8e1f-9186d0fb9a6a
+
+	/// Backlog rate for the latest visible purchase-year cohort.
+	measure 'Latest Cohort Backlog Rate' = DIVIDE([Latest Cohort Backlog Tickets], [Latest Cohort Total Tickets])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 6734a65a-9220-41cd-9318-da3066c0e698
+
+	/// Resolution rate for the latest visible purchase-year cohort.
+	measure 'Latest Cohort Resolution Rate' =
+			VAR CohortYear = [Latest Purchase Cohort Year]
+			RETURN CALCULATE([Resolution Rate], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 93cf6566-aa1f-4df5-8eee-fef7e89d30bb
+
+	/// Resolution rate for the prior purchase-year cohort.
+	measure 'Prior Cohort Resolution Rate' =
+			VAR CohortYear = [Latest Purchase Cohort Year] - 1
+			RETURN CALCULATE([Resolution Rate], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 13188c63-4f2e-4cec-980a-000de92cc18b
+
+	/// Percentage-point change in resolution rate between the latest and prior purchase-year cohorts; higher is better.
+	measure 'Resolution Rate Cohort Delta pp' = ([Latest Cohort Resolution Rate] - [Prior Cohort Resolution Rate]) * 100
+		formatString: +0.00 "pp";-0.00 "pp";0.00 "pp"
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 24ce3a7c-32f3-4e26-9775-c9dd826ecfc6
+
+	/// Average CSAT for the latest visible purchase-year cohort.
+	measure 'Latest Cohort Average CSAT' =
+			VAR CohortYear = [Latest Purchase Cohort Year]
+			RETURN CALCULATE([Average CSAT], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: 0.00
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 9bac62ee-a9a3-499e-ab0d-dc88f8c5a01a
+
+	/// Average CSAT for the prior purchase-year cohort.
+	measure 'Prior Cohort Average CSAT' =
+			VAR CohortYear = [Latest Purchase Cohort Year] - 1
+			RETURN CALCULATE([Average CSAT], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: 0.00
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: fa05254e-a578-468d-a5c1-dd0c7c48b2d1
+
+	/// Change in average CSAT points between the latest and prior purchase-year cohorts; higher is better.
+	measure 'Average CSAT Cohort Delta' = [Latest Cohort Average CSAT] - [Prior Cohort Average CSAT]
+		formatString: +0.00;-0.00;0.00
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 71f251c8-e12a-4d6b-9b12-3a59d17d21bf
+
+	/// Median validated resolution-cycle minutes for the latest visible purchase-year cohort.
+	measure 'Latest Cohort Median Resolution Cycle Minutes' =
+			VAR CohortYear = [Latest Purchase Cohort Year]
+			RETURN CALCULATE([Median Resolution Cycle Minutes], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0.00
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: bbad30e8-11b7-457b-b1cc-85f5cda242ae
+
+	/// Median validated resolution-cycle minutes for the prior purchase-year cohort.
+	measure 'Prior Cohort Median Resolution Cycle Minutes' =
+			VAR CohortYear = [Latest Purchase Cohort Year] - 1
+			RETURN CALCULATE([Median Resolution Cycle Minutes], REMOVEFILTERS(DimDate[year]), DimDate[year] = CohortYear)
+		formatString: #,0.00
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: cc1cfcc5-508a-4b56-9a43-334afb0d5ab9
+
+	/// Percentage change in median validated resolution-cycle minutes between latest and prior purchase-year cohorts; lower is better.
+	measure 'Median Resolution Cycle Cohort YoY %' = DIVIDE([Latest Cohort Median Resolution Cycle Minutes] - [Prior Cohort Median Resolution Cycle Minutes], [Prior Cohort Median Resolution Cycle Minutes])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Executive Overview\Cohort Comparison
+		lineageTag: 3fc896d6-1400-4f9e-a286-a1851f983c39
+
+	/// Critical and High priority backlog divided by all backlog tickets in the current filter context.
+	measure 'Critical High Share of Backlog' = DIVIDE([Critical High Backlog], [Backlog Tickets])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Ticket Volume
+		lineageTag: 33ff3a74-db56-4ec4-9e5c-a8f022edf921
 
 	/// Hidden placeholder column required by the dedicated measures table.
 	column Placeholder
