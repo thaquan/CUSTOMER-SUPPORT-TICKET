@@ -7,7 +7,7 @@
     "z": 20,
     "height": 250,
     "width": 696,
-    "tabOrder": 20
+    "tabOrder": 15
   },
   "visual": {
     "visualType": "lineClusteredColumnComboChart",
@@ -550,6 +550,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chart: Validated cycles and median time by purchase cohort month.'"
                 }
               }
             }

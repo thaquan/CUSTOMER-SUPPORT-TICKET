@@ -7,7 +7,7 @@
     "z": 20,
     "height": 250,
     "width": 696,
-    "tabOrder": 20
+    "tabOrder": 17
   },
   "visual": {
     "visualType": "lineClusteredColumnComboChart",
@@ -582,6 +582,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chart: Workload, backlog and resolution by purchase cohort month.'"
                 }
               }
             }

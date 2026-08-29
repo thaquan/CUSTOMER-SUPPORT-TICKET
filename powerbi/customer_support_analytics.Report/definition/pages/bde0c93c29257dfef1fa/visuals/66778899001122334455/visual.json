@@ -203,6 +203,19 @@
             }
           }
         }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Filter this page by Product Purchased.'"
+                }
+              }
+            }
+          }
+        }
       ]
     }
   }

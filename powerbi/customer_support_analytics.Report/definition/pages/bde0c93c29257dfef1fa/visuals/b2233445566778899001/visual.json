@@ -7,7 +7,7 @@
     "z": 20,
     "height": 190,
     "width": 536,
-    "tabOrder": 22
+    "tabOrder": 21
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -367,6 +367,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chart: Top products by support demand.'"
                 }
               }
             }

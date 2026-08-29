@@ -7,7 +7,7 @@
     "z": 20,
     "height": 250,
     "width": 376,
-    "tabOrder": 21
+    "tabOrder": 16
   },
   "visual": {
     "visualType": "donutChart",
@@ -496,6 +496,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chart: Low-CSAT concentration by channel.'"
                 }
               }
             }

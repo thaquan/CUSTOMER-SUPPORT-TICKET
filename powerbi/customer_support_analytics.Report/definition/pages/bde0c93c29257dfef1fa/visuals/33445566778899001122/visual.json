@@ -4,7 +4,7 @@
   "position": {
     "x": 12,
     "y": 118,
-    "z": 12,
+    "z": 15,
     "height": 430,
     "width": 128,
     "tabOrder": 1
@@ -150,7 +150,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "25D"
+                  "Value": "65D"
                 }
               }
             }
@@ -182,7 +182,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "45D"
                 }
               }
             }
@@ -278,6 +278,13 @@
                   "Value": "'left'"
                 }
               }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         },
@@ -317,6 +324,13 @@
                   "Value": "'left'"
                 }
               }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         },
@@ -354,6 +368,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'left'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -400,6 +421,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'left'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -475,6 +503,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Navigate between the five report pages.'"
                 }
               }
             }

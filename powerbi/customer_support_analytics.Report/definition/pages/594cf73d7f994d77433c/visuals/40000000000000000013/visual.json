@@ -7,7 +7,7 @@
     "z": 20,
     "height": 190,
     "width": 696,
-    "tabOrder": 22
+    "tabOrder": 17
   },
   "visual": {
     "visualType": "pivotTable",
@@ -471,6 +471,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'None'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Table: Resolution quality by ticket subject.'"
                 }
               }
             }

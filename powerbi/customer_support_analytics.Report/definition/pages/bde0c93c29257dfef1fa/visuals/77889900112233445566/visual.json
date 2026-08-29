@@ -7,7 +7,7 @@
     "z": 20,
     "height": 130,
     "width": 248,
-    "tabOrder": 20
+    "tabOrder": 10
   },
   "visual": {
     "visualType": "cardVisual",
@@ -383,6 +383,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'KPI card: Latest Cohort Backlog Tickets.'"
                 }
               }
             }

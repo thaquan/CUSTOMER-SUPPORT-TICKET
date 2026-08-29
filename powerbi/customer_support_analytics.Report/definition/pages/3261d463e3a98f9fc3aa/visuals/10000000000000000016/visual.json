@@ -7,7 +7,7 @@
     "z": 20,
     "height": 190,
     "width": 376,
-    "tabOrder": 23
+    "tabOrder": 20
   },
   "visual": {
     "visualType": "hundredPercentStackedBarChart",
@@ -529,6 +529,19 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Chart: Status mix by channel.'"
                 }
               }
             }
