@@ -1,4 +1,4 @@
--- Planned next phase: bulk-load the eight local Gold CSV files into staging.
+-- Bulk-load the eight local Gold CSV files into staging.
 USE CustomerSupportAnalytics;
 GO
 
