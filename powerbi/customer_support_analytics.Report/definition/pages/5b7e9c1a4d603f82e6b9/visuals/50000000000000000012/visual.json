@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "50000000000000000012",
   "position": {
     "x": 888,
@@ -27,25 +27,8 @@
                 }
               },
               "queryRef": "DimProduct.product_purchased",
-              "nativeQueryRef": "product_purchased"
-            }
-          ]
-        },
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Backlog Tickets"
-                }
-              },
-              "queryRef": "_Measures.Backlog Tickets",
-              "nativeQueryRef": "Backlog Tickets"
+              "nativeQueryRef": "product_purchased",
+              "active": true
             }
           ]
         },
@@ -78,6 +61,24 @@
               },
               "queryRef": "_Measures.Low CSAT Rate",
               "nativeQueryRef": "Low CSAT Rate"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Backlog Tickets"
+                }
+              },
+              "queryRef": "_Measures.Backlog Tickets",
+              "nativeQueryRef": "Backlog Tickets"
             }
           ]
         }

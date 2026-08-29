@@ -12,7 +12,10 @@ Thumbs.db
 
 # Local authoring utilities and Power BI workspace cache
 /tools/
+/.playwright-cli/
+/artifacts/
 powerbi/**/.pbi/
+powerbi/**/localSettings.json
 powerbi/*.pbix
 
 # Raw, generated, and exception datasets

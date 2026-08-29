@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "50000000000000000014",
   "position": {
     "x": 888,
@@ -27,43 +27,8 @@
                 }
               },
               "queryRef": "DimCustomerProfile.customer_age_band",
-              "nativeQueryRef": "customer_age_band"
-            }
-          ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Average CSAT"
-                }
-              },
-              "queryRef": "_Measures.Average CSAT",
-              "nativeQueryRef": "Average CSAT"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Backlog Rate"
-                }
-              },
-              "queryRef": "_Measures.Backlog Rate",
-              "nativeQueryRef": "Backlog Rate"
+              "nativeQueryRef": "customer_age_band",
+              "active": true
             }
           ]
         },
@@ -82,6 +47,43 @@
               },
               "queryRef": "_Measures.Total Tickets",
               "nativeQueryRef": "Total Tickets"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Average CSAT"
+                }
+              },
+              "queryRef": "_Measures.Average CSAT",
+              "nativeQueryRef": "Average CSAT",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Backlog Rate"
+                }
+              },
+              "queryRef": "_Measures.Backlog Rate",
+              "nativeQueryRef": "Backlog Rate"
             }
           ]
         }

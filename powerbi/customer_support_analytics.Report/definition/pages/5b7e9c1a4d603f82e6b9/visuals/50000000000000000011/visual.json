@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "50000000000000000011",
   "position": {
     "x": 176,
@@ -80,8 +80,7 @@
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
     "objects": {
@@ -201,9 +200,6 @@
       ],
       "dataPoint": [
         {
-          "selector": {
-            "metadata": "_Measures.Total Tickets"
-          },
           "properties": {
             "fill": {
               "solid": {
@@ -216,12 +212,12 @@
                 }
               }
             }
+          },
+          "selector": {
+            "metadata": "_Measures.Total Tickets"
           }
         },
         {
-          "selector": {
-            "metadata": "_Measures.Backlog Tickets"
-          },
           "properties": {
             "fill": {
               "solid": {
@@ -234,6 +230,9 @@
                 }
               }
             }
+          },
+          "selector": {
+            "metadata": "_Measures.Backlog Tickets"
           }
         }
       ],
