@@ -56,6 +56,20 @@
                       "Entity": "_Measures"
                     }
                   },
+                  "Property": "CSAT Responses"
+                }
+              },
+              "queryRef": "_Measures.CSAT Responses",
+              "nativeQueryRef": "CSAT Responses"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
                   "Property": "Backlog Rate"
                 }
               },
@@ -296,7 +310,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Product support risk ranking'"
+                  "Value": "'Product risk ranking • CSAT sample shown'"
                 }
               }
             },

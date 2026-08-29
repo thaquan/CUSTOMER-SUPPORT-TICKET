@@ -388,7 +388,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Monthly survey volume and CSAT trend'"
+                  "Value": "'CSAT responses and score by purchase cohort month'"
                 }
               }
             },

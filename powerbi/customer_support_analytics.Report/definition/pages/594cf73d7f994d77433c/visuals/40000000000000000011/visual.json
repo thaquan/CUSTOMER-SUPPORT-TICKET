@@ -388,7 +388,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Monthly valid-cycle volume and median time'"
+                  "Value": "'Validated cycles and median time by purchase cohort month'"
                 }
               }
             },

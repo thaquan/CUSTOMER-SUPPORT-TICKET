@@ -420,7 +420,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Monthly workload, backlog and resolution'"
+                  "Value": "'Workload, backlog and resolution by purchase cohort month'"
                 }
               }
             },

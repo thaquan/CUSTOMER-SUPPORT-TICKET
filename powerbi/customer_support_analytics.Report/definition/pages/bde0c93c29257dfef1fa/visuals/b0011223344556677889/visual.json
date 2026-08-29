@@ -420,7 +420,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Monthly support demand vs resolution'"
+                  "Value": "'Tickets and resolution by purchase cohort month'"
                 }
               }
             },
