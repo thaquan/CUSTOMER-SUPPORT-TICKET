@@ -59,6 +59,8 @@ These results are descriptive. For example, channel performance is not evidence 
 
 The report is stored as a version-controllable Power BI Project (`.pbip`). It contains a shared page navigator, explanatory notes for ambiguous metrics, report-level visual alt text, and a deterministic tab order.
 
+The report has also been deployed to Power BI Service in a private My Workspace. Because the university tenant disables anonymous `Publish to web`, the five verified screenshots below serve as the public portfolio preview, while the complete PBIP source remains available in this repository.
+
 ### 1. Executive Overview
 
 Executive KPIs, backlog composition, ticket demand, customer satisfaction, and the most important data-quality warning.
@@ -227,7 +229,8 @@ Open `powerbi/customer_support_analytics.pbip` in Power BI Desktop. If the local
 - [x] Power BI semantic model and 35 DAX measures
 - [x] Five-page Power BI report
 - [x] Report navigation, accessibility, and screenshot QA
-- [ ] Optional publication to Power BI Service
+- [x] Power BI Service deployment in a private My Workspace
+- [x] Public five-page screenshot gallery for portfolio review
 
 ## Dataset credit
 
