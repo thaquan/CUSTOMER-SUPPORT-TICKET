@@ -18,6 +18,14 @@ An end-to-end data analytics portfolio project that turns 8,469 raw customer-sup
 
 This project demonstrates data cleaning, data-quality engineering, dimensional modeling, SQL analysis, DAX, dashboard design, analytical communication, accessibility, and Git-based delivery.
 
+## Portfolio documentation
+
+- [Case study](docs/CASE_STUDY.md) — business problem, approach, findings, recommendations, and limitations.
+- [Download the five-page PDF case study](output/pdf/customer-support-analytics-case-study.pdf) — recruiter-ready visual summary.
+- [Data dictionary](docs/DATA_DICTIONARY.md) — model grain, relationships, 21 fact fields, dimensions, and 35 DAX measures.
+- [Interview guide](docs/INTERVIEW_GUIDE.md) — project pitches and technical/business question preparation.
+- [CV and LinkedIn content](docs/APPLICATION_CONTENT.md) — ready-to-adapt application copy.
+
 ## Business problem
 
 The project assumes the role of a Data Analyst supporting the Customer Experience team of an online technology retailer. It addresses five questions:
@@ -185,6 +193,15 @@ Open the scripts in SQL Server Management Studio, update the Gold CSV paths in `
 
 Open `powerbi/customer_support_analytics.pbip` in Power BI Desktop. If the local data path differs, update the source path in Power Query and refresh the model.
 
+### 7. Rebuild the PDF case study
+
+```powershell
+python -m pip install -r requirements-docs.txt
+python scripts/build_case_study_pdf.py
+```
+
+The generated file is written to `output/pdf/customer-support-analytics-case-study.pdf`.
+
 ## Repository structure
 
 ```text
@@ -196,6 +213,12 @@ Open `powerbi/customer_support_analytics.pbip` in Power BI Desktop. If the local
 |   `-- exceptions/             # Conflicting records (not committed)
 |-- notebooks/
 |   `-- 02_gold_model_profiling.ipynb
+|-- docs/
+|   |-- CASE_STUDY.md
+|   |-- DATA_DICTIONARY.md
+|   |-- INTERVIEW_GUIDE.md
+|   `-- APPLICATION_CONTENT.md
+|-- output/pdf/                 # Recruiter-ready case study
 |-- powerbi/
 |   |-- customer_support_analytics.pbip
 |   |-- customer_support_analytics.Report/
@@ -203,9 +226,14 @@ Open `powerbi/customer_support_analytics.pbip` in Power BI Desktop. If the local
 |   `-- img/                    # Verified screenshots for all five pages
 |-- sql/                        # SQL Server DDL, loads, validation, analysis
 |-- src/                        # Silver/Gold pipelines and validation logic
+|-- scripts/
+|   `-- build_case_study_pdf.py
 |-- tests/
 |   |-- test_cleaning.py
 |   `-- test_model.py
+|-- CHANGELOG.md
+|-- LICENSE
+|-- requirements-docs.txt
 |-- requirements.txt
 `-- README.md
 ```
@@ -231,6 +259,8 @@ Open `powerbi/customer_support_analytics.pbip` in Power BI Desktop. If the local
 - [x] Report navigation, accessibility, and screenshot QA
 - [x] Power BI Service deployment in a private My Workspace
 - [x] Public five-page screenshot gallery for portfolio review
+- [x] Case study, data dictionary, interview guide, and application content
+- [x] Versioned five-page PDF case study and v1.0.0 release notes
 
 ## Dataset credit
 
